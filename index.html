@@ -17,12 +17,14 @@
     --accent:#f5b301;
   }
   *{box-sizing:border-box;}
-  body{
+  html,body{
     margin:0;
     font-family:'Cairo',sans-serif;
     background:var(--bg-app);
     color:var(--ink);
     min-height:100vh;
+    overflow-x:hidden;
+    width:100%;
   }
   .app{
     max-width:1100px;
@@ -31,6 +33,7 @@
     display:flex;
     flex-direction:column;
     gap:24px;
+    width:100%;
   }
   h1{
     font-size:20px;
@@ -110,15 +113,23 @@
     padding:10px 12px;
   }
   .preview-wrap{
-    flex:1 1 380px;
+    flex:1 1 320px;
+    min-width:0;
+    width:100%;
     display:flex;
     flex-direction:column;
     align-items:center;
     gap:16px;
   }
+  .stage-outer{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    overflow:hidden;
+  }
   .stage{
     width:540px;
-    max-width:100%;
+    flex-shrink:0;
     transform-origin:top center;
   }
   .card{
@@ -186,8 +197,9 @@
     flex-wrap:wrap;
     justify-content:center;
   }
-  @media (max-width:640px){
-    .stage{transform:scale(0.86);}
+  @media (max-width:700px){
+    .layout{flex-direction:column;}
+    .controls{flex:1 1 auto; width:100%;}
   }
 </style>
 </head>
@@ -236,7 +248,8 @@
     </div>
 
     <div class="preview-wrap">
-      <div class="stage">
+      <div class="stage-outer" id="stageOuter">
+        <div class="stage" id="stage">
         <div class="card" id="card">
           <div class="top-row">
             <div class="user-info">
@@ -263,6 +276,7 @@
             👇 خريطة البداية موجودة تحت
           </div>
         </div>
+        </div>
       </div>
       <div class="toolbar">
         <span class="sub">اضغط على أي نص بالبطاقة نفسها وعدّله زي ما تحب</span>
@@ -273,6 +287,19 @@
 
 <script>
 let activeColor = '#f5b301';
+
+function fitCard(){
+  const outer = document.getElementById('stageOuter');
+  const stage = document.getElementById('stage');
+  const cardHeight = 600;
+  const available = outer.clientWidth;
+  const scale = Math.min(1, available / 540);
+  stage.style.transform = `scale(${scale})`;
+  outer.style.height = (cardHeight * scale) + 'px';
+}
+window.addEventListener('resize', fitCard);
+window.addEventListener('load', fitCard);
+fitCard();
 
 document.getElementById('swatches').addEventListener('click', (e)=>{
   const sw = e.target.closest('.swatch');
