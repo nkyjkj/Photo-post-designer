@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مولد تصميم منشور X</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root{
+    --bg-app:#f4f3ef;
+    --panel:#ffffff;
+    --ink:#1a1a1a;
+    --muted:#6b6b6b;
+    --line:#e6e4dd;
+    --accent:#f5b301;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Cairo',sans-serif;
+    background:var(--bg-app);
+    color:var(--ink);
+    min-height:100vh;
+  }
+  .app{
+    max-width:1100px;
+    margin:0 auto;
+    padding:28px 16px 60px;
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+  }
+  h1{
+    font-size:20px;
+    margin:0;
+    font-weight:800;
+  }
+  .sub{
+    color:var(--muted);
+    font-size:14px;
+    margin-top:4px;
+  }
+  .layout{
+    display:flex;
+    gap:24px;
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+  .controls{
+    flex:1 1 280px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .field label{
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    color:var(--muted);
+    margin-bottom:6px;
+  }
+  .field input[type=text]{
+    width:100%;
+    padding:9px 11px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    font-family:'Cairo',sans-serif;
+    font-size:14px;
+    background:#fafaf8;
+  }
+  .row{display:flex; gap:10px; align-items:center;}
+  .row.wrap{flex-wrap:wrap;}
+  .swatches{display:flex; gap:8px;}
+  .swatch{
+    width:26px; height:26px; border-radius:50%;
+    border:2px solid #fff;
+    outline:1px solid var(--line);
+    cursor:pointer;
+  }
+  .swatch.active{outline:2px solid var(--ink);}
+  .toggle{
+    display:flex; align-items:center; gap:8px;
+    font-size:13px; font-weight:700; color:var(--muted);
+  }
+  .btn{
+    border:none;
+    border-radius:9px;
+    padding:10px 14px;
+    font-family:'Cairo',sans-serif;
+    font-weight:800;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .btn-dark{background:var(--ink); color:#fff;}
+  .btn-light{background:#f0efe9; color:var(--ink);}
+  .btn-accent{background:var(--accent); color:#1a1a1a;}
+  .hint{
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.6;
+    background:#fbf8ee;
+    border:1px solid #eee3c0;
+    border-radius:8px;
+    padding:10px 12px;
+  }
+  .preview-wrap{
+    flex:1 1 380px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:16px;
+  }
+  .stage{
+    width:540px;
+    max-width:100%;
+    transform-origin:top center;
+  }
+  .card{
+    width:540px;
+    height:600px;
+    background:#0a0a0a;
+    border-radius:0px;
+    padding:36px 34px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    position:relative;
+    overflow:hidden;
+  }
+  .top-row{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    direction:ltr;
+  }
+  .user-info{display:flex; gap:12px; align-items:center;}
+  .avatar-circle{
+    width:56px; height:56px; border-radius:50%;
+    background:linear-gradient(135deg,#f5b301,#7c5cff);
+    background-size:cover;
+    background-position:center;
+    flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:900; font-size:20px;
+    overflow:hidden;
+  }
+  .names{display:flex; flex-direction:column; gap:2px;}
+  .name-line{display:flex; align-items:center; gap:6px;}
+  .name-text{
+    color:#fff; font-weight:800; font-size:18px;
+    outline:none;
+  }
+  .badge{width:17px; height:17px; flex-shrink:0;}
+  .handle-text{
+    color:#71767b; font-size:14px; font-weight:600;
+    outline:none;
+  }
+  .dots{color:#71767b; font-size:20px; letter-spacing:2px;}
+  .headline{
+    direction:rtl;
+    text-align:center;
+    color:#fff;
+    font-weight:800;
+    font-size:30px;
+    line-height:1.55;
+    outline:none;
+    padding:0 4px;
+  }
+  .cta{
+    direction:rtl;
+    text-align:center;
+    color:#fff;
+    font-weight:800;
+    font-size:24px;
+    outline:none;
+  }
+  .toolbar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  @media (max-width:640px){
+    .stage{transform:scale(0.86);}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div>
+    <h1>مولد تصميم منشور X (تويتر)</h1>
+    <div class="sub">حرر النصوص مباشرة على البطاقة، لوّن الكلمات اللي عايزها تبرز، وبعدين حمّل الصورة.</div>
+  </div>
+
+  <div class="layout">
+    <div class="controls">
+      <div class="field">
+        <label>صورة البروفايل</label>
+        <input type="file" id="avatarInput" accept="image/*">
+      </div>
+
+      <div class="field">
+        <div class="toggle">
+          <input type="checkbox" id="verifiedToggle" checked>
+          <label for="verifiedToggle" style="margin:0;">علامة التوثيق ✓</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>لون التظليل</label>
+        <div class="swatches" id="swatches">
+          <div class="swatch active" data-color="#f5b301" style="background:#f5b301"></div>
+          <div class="swatch" data-color="#4ade80" style="background:#4ade80"></div>
+          <div class="swatch" data-color="#38bdf8" style="background:#38bdf8"></div>
+          <div class="swatch" data-color="#f472b6" style="background:#f472b6"></div>
+          <div class="swatch" data-color="#ffffff" style="background:#ffffff"></div>
+        </div>
+      </div>
+
+      <div class="hint">
+        حدد أي كلمة داخل النص على البطاقة، ثم اضغط "ظلل التحديد" علشان تلوّنها زي التصميم الأصلي.
+      </div>
+
+      <div class="row wrap">
+        <button class="btn btn-accent" id="highlightBtn">ظلل التحديد</button>
+        <button class="btn btn-light" id="clearBtn">مسح كل التظليل</button>
+      </div>
+
+      <button class="btn btn-dark" id="downloadBtn">⬇ تحميل الصورة PNG</button>
+    </div>
+
+    <div class="preview-wrap">
+      <div class="stage">
+        <div class="card" id="card">
+          <div class="top-row">
+            <div class="user-info">
+              <div class="avatar-circle" id="avatarCircle">AI</div>
+              <div class="names">
+                <div class="name-line">
+                  <span class="name-text" id="nameText" contenteditable="true">AInova</span>
+                  <svg class="badge" id="badgeSvg" viewBox="0 0 22 22" fill="#1d9bf0">
+                    <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.75 1.055-.88 1.69-.13.635-.08 1.294.14 1.902-.585.274-1.083.705-1.436 1.246-.353.54-.55 1.17-.567 1.816.016.647.213 1.276.567 1.817.353.54.85.972 1.436 1.246-.223.606-.272 1.264-.14 1.898.13.634.435 1.219.88 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.851 1.245-1.437c.607.222 1.264.27 1.897.14.634-.13 1.218-.436 1.688-.881.444-.47.75-1.054.881-1.688.13-.634.083-1.29-.14-1.897.586-.274 1.084-.705 1.438-1.246.354-.54.552-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/>
+                  </svg>
+                </div>
+                <div class="handle-text" id="handleText" contenteditable="true">@AInovaHQ</div>
+              </div>
+            </div>
+            <div class="dots">•••</div>
+          </div>
+
+          <div class="headline" id="headline" contenteditable="true">
+            عايز <span style="color:#f5b301">تتعلم الذكاء الاصطناعي</span> من الصفر
+            بس مش عارف تبدأ منين؟
+          </div>
+
+          <div class="cta" id="cta" contenteditable="true">
+            👇 خريطة البداية موجودة تحت
+          </div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <span class="sub">اضغط على أي نص بالبطاقة نفسها وعدّله زي ما تحب</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let activeColor = '#f5b301';
+
+document.getElementById('swatches').addEventListener('click', (e)=>{
+  const sw = e.target.closest('.swatch');
+  if(!sw) return;
+  document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active'));
+  sw.classList.add('active');
+  activeColor = sw.dataset.color;
+});
+
+document.getElementById('highlightBtn').addEventListener('click', ()=>{
+  document.execCommand('styleWithCSS', true);
+  document.execCommand('foreColor', false, activeColor);
+});
+
+document.getElementById('clearBtn').addEventListener('click', ()=>{
+  const headline = document.getElementById('headline');
+  const cta = document.getElementById('cta');
+  headline.querySelectorAll('span').forEach(s=>{ s.style.color = '#ffffff'; });
+  cta.querySelectorAll('span').forEach(s=>{ s.style.color = '#ffffff'; });
+});
+
+document.getElementById('verifiedToggle').addEventListener('change', (e)=>{
+  document.getElementById('badgeSvg').style.display = e.target.checked ? 'inline-block' : 'none';
+});
+
+document.getElementById('avatarInput').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    const circle = document.getElementById('avatarCircle');
+    circle.style.backgroundImage = `url(${ev.target.result})`;
+    circle.textContent = '';
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('downloadBtn').addEventListener('click', ()=>{
+  const card = document.getElementById('card');
+  html2canvas(card, {scale:3, backgroundColor:'#0a0a0a'}).then(canvas=>{
+    const link = document.createElement('a');
+    link.download = 'x-post-design.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+});
+</script>
+</body>
+</html>
