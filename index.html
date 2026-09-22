@@ -6,7 +6,6 @@
 <title>مولد تصميم منشور X</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   :root{
     --bg-app:#f4f3ef;
@@ -325,6 +324,8 @@ document.getElementById('verifiedToggle').addEventListener('change', (e)=>{
   document.getElementById('badgeSvg').style.display = e.target.checked ? 'inline-block' : 'none';
 });
 
+let uploadedAvatarImg = null;
+
 document.getElementById('avatarInput').addEventListener('change', (e)=>{
   const file = e.target.files[0];
   if(!file) return;
@@ -333,18 +334,225 @@ document.getElementById('avatarInput').addEventListener('change', (e)=>{
     const circle = document.getElementById('avatarCircle');
     circle.style.backgroundImage = `url(${ev.target.result})`;
     circle.textContent = '';
+    const img = new Image();
+    img.onload = ()=>{ uploadedAvatarImg = img; };
+    img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
 });
 
-document.getElementById('downloadBtn').addEventListener('click', ()=>{
-  const card = document.getElementById('card');
-  html2canvas(card, {scale:3, backgroundColor:'#0a0a0a'}).then(canvas=>{
+// ---- Native canvas export (avoids html2canvas Arabic shaping bugs) ----
+
+function getColoredWordSegments(el){
+  const segments = [];
+  function walk(node, color){
+    if(node.nodeType === Node.TEXT_NODE){
+      const words = node.textContent.split(/\s+/).filter(Boolean);
+      words.forEach(w => segments.push({text:w, color}));
+    } else if(node.nodeType === Node.ELEMENT_NODE){
+      if(node.tagName === 'BR'){ segments.push({text:'\n', color, isBreak:true}); return; }
+      let col = color;
+      if(node.style && node.style.color) col = node.style.color;
+      node.childNodes.forEach(child => walk(child, col));
+    }
+  }
+  el.childNodes.forEach(n => walk(n, '#ffffff'));
+  return segments;
+}
+
+function wrapSegments(ctx, segments, maxWidth){
+  const spaceWidth = ctx.measureText(' ').width;
+  const lines = [];
+  let currentLine = [];
+  let currentWidth = 0;
+  segments.forEach(seg=>{
+    if(seg.isBreak){
+      if(currentLine.length){ lines.push(currentLine); }
+      currentLine = [];
+      currentWidth = 0;
+      return;
+    }
+    const w = ctx.measureText(seg.text).width;
+    const addWidth = currentLine.length ? spaceWidth + w : w;
+    if(currentWidth + addWidth > maxWidth && currentLine.length > 0){
+      lines.push(currentLine);
+      currentLine = [{...seg, width:w}];
+      currentWidth = w;
+    } else {
+      currentLine.push({...seg, width:w});
+      currentWidth += addWidth;
+    }
+  });
+  if(currentLine.length) lines.push(currentLine);
+  return lines;
+}
+
+function drawLinesCentered(ctx, lines, centerX, startY, lineHeight){
+  const spaceWidth = ctx.measureText(' ').width;
+  ctx.textBaseline = 'alphabetic';
+  lines.forEach((line, i)=>{
+    const totalW = line.reduce((sum,seg)=>sum+seg.width,0) + spaceWidth*(line.length-1);
+    let x = centerX + totalW/2;
+    const y = startY + i*lineHeight;
+    ctx.textAlign = 'right';
+    line.forEach(seg=>{
+      ctx.fillStyle = seg.color;
+      ctx.fillText(seg.text, x, y);
+      x -= seg.width + spaceWidth;
+    });
+  });
+}
+
+function drawImageCover(ctx, img, x, y, w, h){
+  const imgRatio = img.width / img.height;
+  const boxRatio = w / h;
+  let sx, sy, sw, sh;
+  if(imgRatio > boxRatio){
+    sh = img.height; sw = sh * boxRatio; sy = 0; sx = (img.width - sw) / 2;
+  } else {
+    sw = img.width; sh = sw / boxRatio; sx = 0; sy = (img.height - sh) / 2;
+  }
+  ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+}
+
+function drawVerifiedBadge(ctx, cx, cy, r){
+  ctx.save();
+  ctx.fillStyle = '#1d9bf0';
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.fill();
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = r*0.28;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(cx - r*0.5, cy);
+  ctx.lineTo(cx - r*0.1, cy + r*0.4);
+  ctx.lineTo(cx + r*0.55, cy - r*0.4);
+  ctx.stroke();
+  ctx.restore();
+}
+
+async function generateImage(){
+  const scale = 3;
+  const baseW = 540, baseH = 600;
+  const canvas = document.createElement('canvas');
+  canvas.width = baseW * scale;
+  canvas.height = baseH * scale;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(scale, scale);
+  ctx.direction = 'rtl';
+
+  try{
+    await Promise.all([
+      document.fonts.load('900 30px Cairo'),
+      document.fonts.load('800 24px Cairo'),
+      document.fonts.load('800 18px Cairo'),
+      document.fonts.load('700 20px Cairo'),
+      document.fonts.load('600 14px Cairo')
+    ]);
+    await document.fonts.ready;
+  }catch(e){}
+
+  ctx.fillStyle = '#0a0a0a';
+  ctx.fillRect(0, 0, baseW, baseH);
+
+  const padX = 34, padY = 36;
+  const avatarR = 28;
+  const avatarCX = padX + avatarR, avatarCY = padY + avatarR;
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(avatarCX, avatarCY, avatarR, 0, Math.PI*2);
+  ctx.closePath();
+  ctx.clip();
+  if(uploadedAvatarImg){
+    drawImageCover(ctx, uploadedAvatarImg, avatarCX-avatarR, avatarCY-avatarR, avatarR*2, avatarR*2);
+  } else {
+    const grad = ctx.createLinearGradient(avatarCX-avatarR, avatarCY-avatarR, avatarCX+avatarR, avatarCY+avatarR);
+    grad.addColorStop(0, '#f5b301');
+    grad.addColorStop(1, '#7c5cff');
+    ctx.fillStyle = grad;
+    ctx.fillRect(avatarCX-avatarR, avatarCY-avatarR, avatarR*2, avatarR*2);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '900 20px Cairo, sans-serif';
+    ctx.direction = 'ltr';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('AI', avatarCX, avatarCY+1);
+  }
+  ctx.restore();
+
+  const nameX = padX + avatarR*2 + 12;
+  ctx.direction = 'ltr';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '800 18px Cairo, sans-serif';
+  const nameStr = document.getElementById('nameText').textContent.trim() || 'AInova';
+  const nameBaselineY = padY + 19;
+  ctx.fillText(nameStr, nameX, nameBaselineY);
+  const nameWidth = ctx.measureText(nameStr).width;
+  if(document.getElementById('verifiedToggle').checked){
+    drawVerifiedBadge(ctx, nameX + nameWidth + 8 + 8.5, nameBaselineY - 6, 8.5);
+  }
+
+  ctx.fillStyle = '#71767b';
+  ctx.font = '600 14px Cairo, sans-serif';
+  const handleStr = document.getElementById('handleText').textContent.trim() || '@AInovaHQ';
+  ctx.fillText(handleStr, nameX, nameBaselineY + 22);
+
+  ctx.fillStyle = '#71767b';
+  ctx.font = '700 20px Cairo, sans-serif';
+  ctx.direction = 'ltr';
+  ctx.textAlign = 'right';
+  ctx.fillText('•••', baseW - padX, padY + 18);
+
+  ctx.direction = 'rtl';
+  const headlineEl = document.getElementById('headline');
+  ctx.font = '800 30px Cairo, sans-serif';
+  const headlineSegments = getColoredWordSegments(headlineEl);
+  const headlineMaxWidth = baseW - padX*2 - 8;
+  const headlineLines = wrapSegments(ctx, headlineSegments, headlineMaxWidth);
+  const headlineLH = 30 * 1.4;
+
+  const ctaEl = document.getElementById('cta');
+  ctx.font = '800 24px Cairo, sans-serif';
+  const ctaSegments = getColoredWordSegments(ctaEl);
+  const ctaMaxWidth = baseW - padX*2 - 8;
+  const ctaLines = wrapSegments(ctx, ctaSegments, ctaMaxWidth);
+  const ctaLH = 24 * 1.35;
+  const ctaTotalH = ctaLines.length * ctaLH;
+  const ctaStartY = baseH - padY - ctaTotalH + ctaLH*0.75;
+
+  const bandTop = nameBaselineY + 40;
+  const bandBottom = ctaStartY - 30;
+  const headlineTotalH = headlineLines.length * headlineLH;
+  const bandCenter = (bandTop + bandBottom) / 2;
+  const headlineStartY = bandCenter - headlineTotalH/2 + headlineLH*0.75;
+
+  ctx.font = '800 30px Cairo, sans-serif';
+  drawLinesCentered(ctx, headlineLines, baseW/2, headlineStartY, headlineLH);
+
+  ctx.font = '800 24px Cairo, sans-serif';
+  drawLinesCentered(ctx, ctaLines, baseW/2, ctaStartY, ctaLH);
+
+  return canvas;
+}
+
+document.getElementById('downloadBtn').addEventListener('click', async ()=>{
+  const btn = document.getElementById('downloadBtn');
+  const originalText = btn.textContent;
+  btn.textContent = 'جاري التجهيز...';
+  try{
+    const canvas = await generateImage();
     const link = document.createElement('a');
     link.download = 'x-post-design.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
-  });
+  } finally {
+    btn.textContent = originalText;
+  }
 });
 </script>
 </body>
