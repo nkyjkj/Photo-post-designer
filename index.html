@@ -133,10 +133,10 @@
   }
   .card{
     width:540px;
-    height:600px;
+    height:560px;
     background:#0a0a0a;
     border-radius:0px;
-    padding:36px 34px;
+    padding:60px 36px 40px;
     display:flex;
     flex-direction:column;
     justify-content:space-between;
@@ -151,34 +151,35 @@
   }
   .user-info{display:flex; gap:12px; align-items:center;}
   .avatar-circle{
-    width:56px; height:56px; border-radius:50%;
+    width:68px; height:68px; border-radius:50%;
     background:linear-gradient(135deg,#f5b301,#7c5cff);
     background-size:cover;
     background-position:center;
     flex-shrink:0;
     display:flex; align-items:center; justify-content:center;
-    color:#fff; font-weight:900; font-size:20px;
+    color:#fff; font-weight:900; font-size:24px;
     overflow:hidden;
   }
   .names{display:flex; flex-direction:column; gap:2px;}
-  .name-line{display:flex; align-items:center; gap:6px;}
+  .name-line{display:flex; align-items:center; gap:7px;}
   .name-text{
-    color:#fff; font-weight:800; font-size:18px;
+    color:#fff; font-weight:800; font-size:22px;
     outline:none;
   }
-  .badge{width:17px; height:17px; flex-shrink:0;}
+  .badge{width:20px; height:20px; flex-shrink:0;}
   .handle-text{
-    color:#71767b; font-size:14px; font-weight:600;
+    color:#71767b; font-size:15px; font-weight:600;
     outline:none;
   }
-  .dots{color:#71767b; font-size:20px; letter-spacing:2px;}
+  .dots{display:flex; align-items:center; gap:6px; margin-top:8px;}
+  .dot{width:6px; height:6px; border-radius:50%; background:#71767b; flex-shrink:0;}
   .headline{
     direction:rtl;
     text-align:center;
     color:#fff;
     font-weight:800;
-    font-size:30px;
-    line-height:1.55;
+    font-size:36px;
+    line-height:1.45;
     outline:none;
     padding:0 4px;
   }
@@ -187,7 +188,7 @@
     text-align:center;
     color:#fff;
     font-weight:800;
-    font-size:24px;
+    font-size:28px;
     outline:none;
   }
   .toolbar{
@@ -256,23 +257,29 @@
               <div class="names">
                 <div class="name-line">
                   <span class="name-text" id="nameText" contenteditable="true">AInova</span>
-                  <svg class="badge" id="badgeSvg" viewBox="0 0 22 22" fill="#1d9bf0">
-                    <path d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.75 1.055-.88 1.69-.13.635-.08 1.294.14 1.902-.585.274-1.083.705-1.436 1.246-.353.54-.55 1.17-.567 1.816.016.647.213 1.276.567 1.817.353.54.85.972 1.436 1.246-.223.606-.272 1.264-.14 1.898.13.634.435 1.219.88 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.851 1.245-1.437c.607.222 1.264.27 1.897.14.634-.13 1.218-.436 1.688-.881.444-.47.75-1.054.881-1.688.13-.634.083-1.29-.14-1.897.586-.274 1.084-.705 1.438-1.246.354-.54.552-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/>
+                  <svg class="badge" id="badgeSvg" viewBox="0 0 22 22">
+                    <path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.75 1.055-.88 1.69-.13.635-.08 1.294.14 1.902-.585.274-1.083.705-1.436 1.246-.353.54-.55 1.17-.567 1.816.016.647.213 1.276.567 1.817.353.54.85.972 1.436 1.246-.223.606-.272 1.264-.14 1.898.13.634.435 1.219.88 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.851 1.245-1.437c.607.222 1.264.27 1.897.14.634-.13 1.218-.436 1.688-.881.444-.47.75-1.054.881-1.688.13-.634.083-1.29-.14-1.897.586-.274 1.084-.705 1.438-1.246.354-.54.552-1.17.569-1.816z"/>
+                    <path fill="#ffffff" d="M9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/>
                   </svg>
                 </div>
                 <div class="handle-text" id="handleText" contenteditable="true">@AInovaHQ</div>
               </div>
             </div>
-            <div class="dots">•••</div>
+            <div class="dots">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
           </div>
 
           <div class="headline" id="headline" contenteditable="true">
-            عايز <span style="color:#f5b301">تتعلم الذكاء الاصطناعي</span> من الصفر
-            بس مش عارف تبدأ منين؟
+            باقي <span style="color:#f5b301">3 شهور</span> على انتهاء <span style="color:#f5b301">2026</span>
+            وإنت لسه مش عارف تستخدم
+            <span style="color:#f5b301">الذكاء الاصطناعي</span>؟
           </div>
 
           <div class="cta" id="cta" contenteditable="true">
-            👇 خريطة البداية موجودة تحت
+            خريطة بداية تعلم الـ <span style="color:#f5b301">AI</span> في <span style="color:#f5b301">30</span> يوم 👇
           </div>
         </div>
         </div>
@@ -290,7 +297,7 @@ let activeColor = '#f5b301';
 function fitCard(){
   const outer = document.getElementById('stageOuter');
   const stage = document.getElementById('stage');
-  const cardHeight = 600;
+  const cardHeight = 560;
   const available = outer.clientWidth;
   const scale = Math.min(1, available / 540);
   stage.style.transform = `scale(${scale})`;
@@ -415,27 +422,34 @@ function drawImageCover(ctx, img, x, y, w, h){
   ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
 }
 
-function drawVerifiedBadge(ctx, cx, cy, r){
+const VERIFIED_SEAL_PATH = 'M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.69.882-.445.47-.75 1.055-.88 1.69-.13.635-.08 1.294.14 1.902-.585.274-1.083.705-1.436 1.246-.353.54-.55 1.17-.567 1.816.016.647.213 1.276.567 1.817.353.54.85.972 1.436 1.246-.223.606-.272 1.264-.14 1.898.13.634.435 1.219.88 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.851 1.245-1.437c.607.222 1.264.27 1.897.14.634-.13 1.218-.436 1.688-.881.444-.47.75-1.054.881-1.688.13-.634.083-1.29-.14-1.897.586-.274 1.084-.705 1.438-1.246.354-.54.552-1.17.569-1.816z';
+const VERIFIED_CHECK_PATH = 'M9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z';
+
+function drawVerifiedBadge(ctx, x, y, size){
   ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(size/22, size/22);
   ctx.fillStyle = '#1d9bf0';
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI*2);
-  ctx.fill();
-  ctx.strokeStyle = '#ffffff';
-  ctx.lineWidth = r*0.28;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  ctx.beginPath();
-  ctx.moveTo(cx - r*0.5, cy);
-  ctx.lineTo(cx - r*0.1, cy + r*0.4);
-  ctx.lineTo(cx + r*0.55, cy - r*0.4);
-  ctx.stroke();
+  ctx.fill(new Path2D(VERIFIED_SEAL_PATH));
+  ctx.fillStyle = '#ffffff';
+  ctx.fill(new Path2D(VERIFIED_CHECK_PATH));
   ctx.restore();
+}
+
+function drawDots(ctx, rightX, centerY, dotSize, gap){
+  ctx.fillStyle = '#71767b';
+  const r = dotSize/2;
+  for(let i=0; i<3; i++){
+    const cx = rightX - r - i*(dotSize+gap);
+    ctx.beginPath();
+    ctx.arc(cx, centerY, r, 0, Math.PI*2);
+    ctx.fill();
+  }
 }
 
 async function generateImage(){
   const scale = 3;
-  const baseW = 540, baseH = 600;
+  const baseW = 540, baseH = 560;
   const canvas = document.createElement('canvas');
   canvas.width = baseW * scale;
   canvas.height = baseH * scale;
@@ -445,11 +459,11 @@ async function generateImage(){
 
   try{
     await Promise.all([
-      document.fonts.load('900 30px Cairo'),
-      document.fonts.load('800 24px Cairo'),
-      document.fonts.load('800 18px Cairo'),
-      document.fonts.load('700 20px Cairo'),
-      document.fonts.load('600 14px Cairo')
+      document.fonts.load('900 36px Cairo'),
+      document.fonts.load('800 28px Cairo'),
+      document.fonts.load('800 22px Cairo'),
+      document.fonts.load('700 22px Cairo'),
+      document.fonts.load('600 15px Cairo')
     ]);
     await document.fonts.ready;
   }catch(e){}
@@ -457,9 +471,9 @@ async function generateImage(){
   ctx.fillStyle = '#0a0a0a';
   ctx.fillRect(0, 0, baseW, baseH);
 
-  const padX = 34, padY = 36;
-  const avatarR = 28;
-  const avatarCX = padX + avatarR, avatarCY = padY + avatarR;
+  const padX = 36, padTop = 60, padBottom = 40;
+  const avatarR = 34;
+  const avatarCX = padX + avatarR, avatarCY = padTop + avatarR;
 
   ctx.save();
   ctx.beginPath();
@@ -475,7 +489,7 @@ async function generateImage(){
     ctx.fillStyle = grad;
     ctx.fillRect(avatarCX-avatarR, avatarCY-avatarR, avatarR*2, avatarR*2);
     ctx.fillStyle = '#ffffff';
-    ctx.font = '900 20px Cairo, sans-serif';
+    ctx.font = '900 24px Cairo, sans-serif';
     ctx.direction = 'ltr';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -483,58 +497,56 @@ async function generateImage(){
   }
   ctx.restore();
 
-  const nameX = padX + avatarR*2 + 12;
+  const nameX = padX + avatarR*2 + 14;
+  const nameBaselineY = avatarCY - 4;
+  const handleBaselineY = avatarCY + 21;
+
   ctx.direction = 'ltr';
   ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
   ctx.fillStyle = '#ffffff';
-  ctx.font = '800 18px Cairo, sans-serif';
+  ctx.font = '800 22px Cairo, sans-serif';
   const nameStr = document.getElementById('nameText').textContent.trim() || 'AInova';
-  const nameBaselineY = padY + 19;
   ctx.fillText(nameStr, nameX, nameBaselineY);
   const nameWidth = ctx.measureText(nameStr).width;
   if(document.getElementById('verifiedToggle').checked){
-    drawVerifiedBadge(ctx, nameX + nameWidth + 8 + 8.5, nameBaselineY - 6, 8.5);
+    drawVerifiedBadge(ctx, nameX + nameWidth + 8, nameBaselineY - 18, 20);
   }
 
   ctx.fillStyle = '#71767b';
-  ctx.font = '600 14px Cairo, sans-serif';
+  ctx.font = '600 15px Cairo, sans-serif';
   const handleStr = document.getElementById('handleText').textContent.trim() || '@AInovaHQ';
-  ctx.fillText(handleStr, nameX, nameBaselineY + 22);
+  ctx.fillText(handleStr, nameX, handleBaselineY);
 
-  ctx.fillStyle = '#71767b';
-  ctx.font = '700 20px Cairo, sans-serif';
-  ctx.direction = 'ltr';
-  ctx.textAlign = 'right';
-  ctx.fillText('•••', baseW - padX, padY + 18);
+  drawDots(ctx, baseW - padX, nameBaselineY - 7, 6, 6);
 
   ctx.direction = 'rtl';
   const headlineEl = document.getElementById('headline');
-  ctx.font = '800 30px Cairo, sans-serif';
+  ctx.font = '800 36px Cairo, sans-serif';
   const headlineSegments = getColoredWordSegments(headlineEl);
   const headlineMaxWidth = baseW - padX*2 - 8;
   const headlineLines = wrapSegments(ctx, headlineSegments, headlineMaxWidth);
-  const headlineLH = 30 * 1.4;
+  const headlineLH = 36 * 1.35;
 
   const ctaEl = document.getElementById('cta');
-  ctx.font = '800 24px Cairo, sans-serif';
+  ctx.font = '800 28px Cairo, sans-serif';
   const ctaSegments = getColoredWordSegments(ctaEl);
   const ctaMaxWidth = baseW - padX*2 - 8;
   const ctaLines = wrapSegments(ctx, ctaSegments, ctaMaxWidth);
-  const ctaLH = 24 * 1.35;
+  const ctaLH = 28 * 1.3;
   const ctaTotalH = ctaLines.length * ctaLH;
-  const ctaStartY = baseH - padY - ctaTotalH + ctaLH*0.75;
+  const ctaStartY = baseH - padBottom - ctaTotalH + ctaLH*0.75;
 
-  const bandTop = nameBaselineY + 40;
-  const bandBottom = ctaStartY - 30;
+  const bandTop = handleBaselineY + 34;
+  const bandBottom = ctaStartY - 28;
   const headlineTotalH = headlineLines.length * headlineLH;
   const bandCenter = (bandTop + bandBottom) / 2;
   const headlineStartY = bandCenter - headlineTotalH/2 + headlineLH*0.75;
 
-  ctx.font = '800 30px Cairo, sans-serif';
+  ctx.font = '800 36px Cairo, sans-serif';
   drawLinesCentered(ctx, headlineLines, baseW/2, headlineStartY, headlineLH);
 
-  ctx.font = '800 24px Cairo, sans-serif';
+  ctx.font = '800 28px Cairo, sans-serif';
   drawLinesCentered(ctx, ctaLines, baseW/2, ctaStartY, ctaLH);
 
   return canvas;
