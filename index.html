@@ -254,6 +254,7 @@
         </div>
       </div>
 
+      <button class="btn btn-accent" id="shareBtn">📤 مشاركة على أي منصة</button>
       <button class="btn btn-dark" id="downloadBtn">⬇ تحميل الصورة PNG</button>
     </div>
 
@@ -658,6 +659,35 @@ document.getElementById('downloadBtn').addEventListener('click', async ()=>{
     link.href = canvas.toDataURL('image/png');
     link.click();
   } finally {
+    btn.textContent = originalText;
+  }
+});
+
+document.getElementById('shareBtn').addEventListener('click', async ()=>{
+  const btn = document.getElementById('shareBtn');
+  const originalText = btn.textContent;
+  btn.textContent = 'جاري التجهيز...';
+  try{
+    const canvas = await generateImage();
+    canvas.toBlob(async (blob)=>{
+      btn.textContent = originalText;
+      if(!blob) return;
+      const file = new File([blob], 'x-post-design.png', {type:'image/png'});
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        try{
+          await navigator.share({files:[file]});
+        }catch(err){
+          // user cancelled the share sheet - nothing to do
+        }
+      } else {
+        alert('المشاركة المباشرة مش مدعومة في هذا المتصفح، هنزّل الصورة عادي وتقدر تشاركها من معرض الصور بعد كده.');
+        const link = document.createElement('a');
+        link.download = 'x-post-design.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }
+    }, 'image/png');
+  } catch(e){
     btn.textContent = originalText;
   }
 });
